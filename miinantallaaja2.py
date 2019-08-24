@@ -1,6 +1,7 @@
 import pyglet
 import random
 import haravasto
+import time
 
 #sanakirja hiiren painikkeille, jossa avaimet poimittu haravastosta
 painikkeet = {
@@ -14,7 +15,8 @@ tila = {
     "kentta": None,
     "kentta2": None,
     "liput": None,
-    "miinat": None
+    "miinat": None,
+    "aloitus": None
     }
 
 def kasittele_hiiri(x, y, painike, muokkaus):
@@ -42,7 +44,7 @@ def miinoita(kentta, ruudut, miinat):
     tila["miinat"] = miinojen_maara
     tila["kentta"] = kentta
 
-def sijoita_numerot(x, y, kentta):
+def laske_numerot(x, y, kentta):
     """
     Asettaa numerot miinojen ympärille
     """
@@ -52,7 +54,8 @@ def sijoita_numerot(x, y, kentta):
             if 0 <= i < len(kentta): #tarkistetaan, etta ollaan huoneen sisalla    
                 if 0 <= j < len(kentta[i]): #tarkistetaan, etta ollaan huoneen sisalla    
                     if kentta[i][j] == "x": #jos ruudussa on miina
-                        miinat += 1 #lisataan lopputulokseen yksi miina                
+                        miinat += 1 #lisataan lopputulokseen yksi miina                   
+    
     print("Ruutua {},{} ympäröi {} miinaa.".format(i, j, miinat))
     return miinat
 
@@ -60,7 +63,7 @@ def tarkista_voitto(x, y):
     #tarkistaa onko liput samoissa paikoissa kuin miinat
     if set(tila["liput"]) == set(tila["miinat"]):
         print("Voitit pelin")
-        #print("Aikaa kului: {:.2f} sekunttia".format(lopeta_kello()))
+        print("Aikaa kului: {:.2f} sekunttia".format(lopeta_kello()))
         piirra_kentta()
 
 def sijoita_lippu(x, y):
@@ -97,28 +100,38 @@ def tulvataytto(kentta, x, y):
     Merkitsee kentällä olevat tuntemattomat alueet turvalliseksi siten, että
     täyttö aloitetaan annetusta x, y -pisteestä.
     """
-    kentta2 = tila["kentta2"] #paljastaa kaikki numerot vaikkei saisi
-    if kentta[x][y] == "x": #jos ruudussa on miina, palaa loopin alkuun
+    #kentta2 = tila["kentta2"] #paljastaa kaikki numerot tarkistusta varten
+    if kentta[y][x] == "x": #jos ruudussa on miina, palaa loopin alkuun
         return
-    else:    
+    else: #muutoin   
         fill = [(x, y)] #tayta ruutu x, y 
         while fill: #tayton tapahtuessa, tee seuraavasti
             x, y = fill.pop() #removes and returns last value from the list or the given index value
-            for nx in range(max(0, x - 1), min(len(kentta), x + 2)): #kaydaan lapi kaikki sarakkeet
-                for ny in range(max(0, y - 1), min(len(kentta[0]), y + 2)): #kaydaan lapi kaikki rivit
-                    if kentta[x][y] == " ": #jos ruutu on tyhja
-                        fill.append((nx, ny)) #tayta ruutu
-                        miinat = str(sijoita_numerot(x, y, kentta))
-                        kentta[x][y] = miinat #tayttaa ruudun miinojen maaralla
-                        #kentta2[x][y] = miinat
+            for l in range(max(0, y - 1), min(len(kentta), y + 2)): #kaydaan lapi kaikki sarakkeet
+                for k in range(max(0, x - 1), min(len(kentta[0]), x + 2)): #kaydaan lapi kaikki rivit
+                    if kentta[l][k] == " ": #jos ruutu on tyhja
+                        fill.append((k, l)) #tayta ruutu
+                        miinat = str(laske_numerot(k, l, kentta))
+                        kentta[l][k] = miinat #tayttaa ruudun miinojen maaralla
+                        #kentta2[l][k] = miinat           
 
 def tarkista_havio(x, y):
 	#tarkistaa onko painetussa kohdassa miina
 	if tila["kentta"][x][y] == "x":
 		print("Hävisit pelin")
-		#print("Aikaa kului: {:.2f} sekunttia".format(lopeta_kello()))
+		print("Aikaa kului: {:.2f} sekunttia".format(lopeta_kello()))
 		tila["kentta2"] = tila["kentta"]
 		piirra_kentta()
+
+def aloita_kello():
+	# Aloittaa sekunttikellon
+	tila["aloitus"] = time.time()
+
+def lopeta_kello():
+	# Lopettaa sekunttikellon
+	loppuaika = time.time()
+	total = loppuaika - tila["aloitus"]
+	return total
 
 def avaa_ruutu(x, y):
     tarkista_havio(x, y)
@@ -133,7 +146,9 @@ def avaa_ruutu(x, y):
         if int(tila["kentta"][x][y]) > 0:
             tila["kentta2"][x][y] = tila["kentta"][x][y] 
         if tila["kentta"][x][y] == "0":
-            tulvataytto(x, y)
+            tulvataytto(kentta, x, y)
+        if tila["kentta"][x][y] != "x" and tila["kentta2"][x][y] != "f":
+            tila["kentta2"][x][y] = tila["kentta"][x][y]    
         piirra_kentta()       
 
 def main(kentta):
@@ -145,6 +160,7 @@ def main(kentta):
     haravasto.luo_ikkuna(len(kentta[0])*40, len(kentta*40)) #luo kentan kokoisen ikkunan
     haravasto.aseta_hiiri_kasittelija(kasittele_hiiri) 
     haravasto.aseta_piirto_kasittelija(piirra_kentta)
+    aloita_kello()
     haravasto.aloita()
     
 if __name__ == "__main__":
