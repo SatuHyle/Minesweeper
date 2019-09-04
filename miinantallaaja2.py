@@ -38,7 +38,7 @@ def miinoita(kentta, ruudut, miinat):
     """
     miinojen_maara = []
     for i, j in random.sample(ruudut, miinat):
-        kentta[i][j] = "x"
+        kentta[j][i] = "x"
         miinojen_maara.append((i, j))
         
     tila["miinat"] = miinojen_maara
@@ -83,17 +83,15 @@ def sijoita_lippu(x, y):
 	piirra_kentta()
 
 def piirra_kentta():
-    """
-    Käsittelijäfunktio, joka piirtää kaksiulotteisena listana kuvatun miinakentän
-    ruudut näkyviin peli-ikkunaan. Funktiota kutsutaan aina kun pelimoottori pyytää
-    ruudun näkymän päivitystä.
-    """
-    haravasto.tyhjaa_ikkuna()
-    haravasto.aloita_ruutujen_piirto()
-    for x, rivi in enumerate(tila["kentta2"]):
-        for y, ruutu in enumerate(rivi):
-            haravasto.lisaa_piirrettava_ruutu(ruutu, x * 40, y * 40)
-    haravasto.piirra_ruudut()
+	"""Käsittelijäfunktio, joka piirtää kaksiulotteisena listana kuvatun miinakentän ruudut näkyviin peli-ikkunaan.
+	Funktiota kutsutaan aina kun pelimoottori pyytää ruudun näkymän päivitystä."""
+	haravasto.tyhjaa_ikkuna()
+	haravasto.piirra_tausta()
+	haravasto.aloita_ruutujen_piirto()
+	for x in range(len(tila["kentta2"])):
+		for y in range(len(tila["kentta2"][0])):
+				haravasto.lisaa_piirrettava_ruutu(tila["kentta2"][x][y], x * 40, y * 40)
+	haravasto.piirra_ruudut()
 
 def tulvataytto(kentta, x, y):
     """
@@ -101,7 +99,7 @@ def tulvataytto(kentta, x, y):
     täyttö aloitetaan annetusta x, y -pisteestä.
     """
     #kentta2 = tila["kentta2"] #paljastaa kaikki numerot tarkistusta varten
-    if kentta[y][x] == "x": #jos ruudussa on miina, palaa loopin alkuun
+    if kentta[x][y] == "x": #jos ruudussa on miina, palaa loopin alkuun
         return
     else: #muutoin   
         fill = [(x, y)] #tayta ruutu x, y 
@@ -143,10 +141,10 @@ def avaa_ruutu(x, y):
         piirra_kentta()
 
     if tila["kentta2"][x][y] == " ":
-        if int(tila["kentta"][x][y]) > 0:
-            tila["kentta2"][x][y] = tila["kentta"][x][y] 
-        if tila["kentta"][x][y] == "0":
-            tulvataytto(kentta, x, y)
+        #if int(tila["kentta"][x][y]) > 0:
+            #tila["kentta2"][x][y] = tila["kentta"][x][y] 
+        #if tila["kentta"][x][y] == "0":
+        tulvataytto(kentta, x, y)
         if tila["kentta"][x][y] != "x" and tila["kentta2"][x][y] != "f":
             tila["kentta2"][x][y] = tila["kentta"][x][y]    
         piirra_kentta()       
@@ -157,7 +155,7 @@ def main(kentta):
     Käynnistää sovelluksen.
     """
     haravasto.lataa_kuvat("spritet")
-    haravasto.luo_ikkuna(len(kentta[0])*40, len(kentta*40)) #luo kentan kokoisen ikkunan
+    haravasto.luo_ikkuna(len(tila["kentta2"] * 40), len(tila["kentta2"][0] * 40)) #luo kentan kokoisen ikkunan
     haravasto.aseta_hiiri_kasittelija(kasittele_hiiri) 
     haravasto.aseta_piirto_kasittelija(piirra_kentta)
     aloita_kello()
