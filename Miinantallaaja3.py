@@ -104,15 +104,19 @@ def tulvataytto(kentta, kentta2, x, y):
     else: #muutoin   
         fill = [(x, y)] #tayta ruutu x, y 
         while fill: #tayton tapahtuessa, tee seuraavasti
-            x, y = fill.pop() #removes and returns last value from the list or the given index value
-            #tahan tarvitaan levitysehto
-            for l in range(max(0, y - 1), min(len(kentta), y + 2)): #kaydaan lapi kaikki sarakkeet
-                for k in range(max(0, x - 1), min(len(kentta[0]), x + 2)): #kaydaan lapi kaikki rivit
-                    if kentta[l][k] == " ": #tama pitaisi katsoa kentasta 2?
-                        #if kentta[l][k] == "0" : #tama pitaisi katsoa kentasta?
-                        fill.append((k, l)) #tayta ruutu
-                        miinat = str(laske_numerot(k, l, kentta))
-                        kentta[l][k] = miinat #tayttaa ruudun miinojen maaralla       
+            i, j = fill.pop() #removes and returns last value from the list or the given index value
+            tila["kentta2"][j][i] = tila["kentta"][j][i]
+            miinat = str(laske_numerot(i, j, kentta))
+            kentta[j][i] = miinat 
+            if kentta[j][i] == 0:
+                print("jeejee") 
+                for l in range(max(0, j - 1), min(len(kentta), j + 2)): #kaydaan lapi kaikki sarakkeet
+                    for k in range(max(0, i - 1), min(len(kentta[0]), i + 2)): #kaydaan lapi kaikki rivit
+                        if kentta[l][k] == " ": #jos ruutu on tyhja
+                            fill.append((k, l)) #tayta ruutu
+                            miinat = str(laske_numerot(k, l, kentta))
+                            kentta[l][k] = miinat #tayttaa ruudun miinojen maaralla
+                            #kentta2[l][k] = miinat     
 
 def tarkista_havio(x, y):
 	#tarkistaa onko painetussa kohdassa miina
@@ -141,10 +145,10 @@ def avaa_ruutu(x, y):
         tila["kentta2"][x][y] = tila["kentta"][x][y] 
         piirra_kentta()
 
-    tulvataytto(kentta, kentta2, x, y)
-    if tila["kentta"][x][y] != "x" and tila["kentta2"][x][y] != "f":
-        tila["kentta2"][x][y] = tila["kentta"][x][y]    
-    piirra_kentta()         
+        tulvataytto(kentta, kentta2, x, y)
+        if tila["kentta"][x][y] != "x" and tila["kentta2"][x][y] != "f":
+            tila["kentta2"][x][y] = tila["kentta"][x][y]    
+        piirra_kentta()       
 
 def main(kentta):
     """
