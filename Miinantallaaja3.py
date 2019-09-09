@@ -119,6 +119,7 @@ def tulvataytto(kentta, x, y):
                         fill.append((k, l)) #tayta ruutu
                         if kentta[y][x] != "x" and kentta2[y][x] != "f":
                             kentta2[y][x] = kentta[y][x]
+
                         #miinat = str(laske_numerot(k, l, kentta))
                         #kentta[l][k] = miinat #tayttaa ruudun miinojen maaralla
                         #kentta2[l][k] = miinat             
