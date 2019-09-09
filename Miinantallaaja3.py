@@ -90,7 +90,7 @@ def piirra_kentta():
     """
     haravasto.tyhjaa_ikkuna()
     haravasto.aloita_ruutujen_piirto()
-    for k, rivi in enumerate(tila["kentta"]):
+    for k, rivi in enumerate(tila["kentta2"]):
         for l, ruutu in enumerate(rivi):
             haravasto.lisaa_piirrettava_ruutu(ruutu, l * 40, k * 40)
     haravasto.piirra_ruudut()
@@ -150,11 +150,11 @@ def avaa_ruutu(x, y):
         tila["kentta2"][y][x] = tila["kentta"][y][x] 
         piirra_kentta()
 
-    if tila["kentta2"][y][x] == " ":
-        #if int(tila["kentta"][x][y]) > 0:
+    #if tila["kentta2"][y][x] == " ":
+    #if int(tila["kentta"][x][y]) > 0:
             #tila["kentta2"][x][y] = tila["kentta"][x][y] 
-        #if tila["kentta"][x][y] == "0":
-        tulvataytto(kentta, x, y)
+        #if tila["kentta"][y][x] == "0":
+    tulvataytto(kentta, x, y)
         #if tila["kentta"][x][y] != "x" and tila["kentta2"][x][y] != "f":
             #tila["kentta2"][x][y] = tila["kentta"][x][y]    
         #piirra_kentta()       
@@ -165,7 +165,7 @@ def main(kentta):
     Käynnistää sovelluksen.
     """
     haravasto.lataa_kuvat("spritet")
-    haravasto.luo_ikkuna(len(tila["kentta2"] * 40), len(tila["kentta2"][0] * 40)) #luo kentan kokoisen ikkunan
+    haravasto.luo_ikkuna(len(tila["kentta2"][1] * 40), len(tila["kentta2"] * 40)) #luo kentan kokoisen ikkunan
     haravasto.aseta_hiiri_kasittelija(kasittele_hiiri) 
     haravasto.aseta_piirto_kasittelija(piirra_kentta)
     aloita_kello()
@@ -182,17 +182,17 @@ if __name__ == "__main__":
     
     kentta = [] #luodaan kentta
     kentta2 = [] #luodaan toinen kentta, jonka avulla peitetaan miinat
-    for rivi in range(korkeus): #korkeus                           
+    for rivi in range(korkeus):                          
         kentta.append([])
         kentta2.append([])
-        for sarake in range(pituus): #leveys
+        for sarake in range(pituus):
             kentta[-1].append(" ")
             kentta2[-1].append(" ")
 
     jaljella = [] #lista vapaista ruuduista
     jaljella2 = []
-    for x in range(pituus): #leveys
-        for y in range(korkeus): #korkeus        
+    for x in range(pituus):
+        for y in range(korkeus):       
             jaljella.append((x, y)) 
             jaljella2.append((x, y))
 
