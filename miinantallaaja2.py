@@ -155,7 +155,7 @@ def main(kentta):
     Käynnistää sovelluksen.
     """
     haravasto.lataa_kuvat("spritet")
-    haravasto.luo_ikkuna(len(tila["kentta2"] * 40), len(tila["kentta2"][0] * 40)) #luo kentan kokoisen ikkunan
+    haravasto.luo_ikkuna(len(tila["kentta2"]), len(tila["kentta2"][0])) #luo kentan kokoisen ikkunan
     haravasto.aseta_hiiri_kasittelija(kasittele_hiiri) 
     haravasto.aseta_piirto_kasittelija(piirra_kentta)
     aloita_kello()
