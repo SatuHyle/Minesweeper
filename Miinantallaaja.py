@@ -7,7 +7,7 @@ import haravasto
 #sanakirja hiiren painikkeille, jossa avaimet poimittu haravastosta
 painikkeet = {
     haravasto.HIIRI_VASEN: "vasen",
-    haravasto.HIIRI_KESKI: "keski",
+    haravasto.HIIRI_KESKI: "keski",\
     haravasto.HIIRI_OIKEA: "oikea"
     }
 
